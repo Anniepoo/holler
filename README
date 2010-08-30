@@ -2,6 +2,8 @@
 
 A message broadcasting system for Clojure
 
+note - this is in development, it's not useful for anything yet
+
 ## Usage
 
 Forgive the weird names. I didn't want to collide with 'actor' based
@@ -33,12 +35,10 @@ Doodads can be moved to another space
 or killed
 (move nil)
 
-(holler <id> <data>)
-(holler-wait <id> <data>)
-(holler-space <space-ref> <id> <data>)
-(holler-wait-space <space-ref> <id> <data>)
-
-
+(holler <id> <options> <data>)
+options can be
+:wait   - block until all receivers have processed this message
+:space <ref>  - message in this space, not in my location
 
 ## Installation
 
@@ -49,5 +49,5 @@ FIXME: write
 Copyright (C) 2010 Anne Ogborn
 
 This program may be used and distributed under the terms of
-Lesser GNU Public License.
+Lesser GNU Public License. Doing evil with it is strictly prohibited.
 
