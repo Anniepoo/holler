@@ -1,0 +1,53 @@
+# holler
+
+A message broadcasting system for Clojure
+
+## Usage
+
+Forgive the weird names. I didn't want to collide with 'actor' based
+systems, and 'object' seemed suicidal as well.
+
+The metaphor is that there are objects (I call them doodads)
+which are, at any time, in one or more spaces.
+Each space is itself a doodad.
+
+doodads communicate by broadcasting async messages.
+Other doodads in the space register to listen to messages.
+
+The space itself may broadcast and liston to messages.
+
+Each doodad has a (possibly non-unique) name.
+
+Doodads can talk into any space they have a reference to.
+Doodads are 'in' one space.
+
+(doodad <name> <space> <init-state>
+   (listen <restriction-map> <handler-fn>) 
+   (listen <restriction-map> <handler-fn>) ...
+   )
+   
+Notice that a doodad is created in a given space.
+Doodads can be moved to another space
+(move <new-space>)
+
+or killed
+(move nil)
+
+(holler <id> <data>)
+(holler-wait <id> <data>)
+(holler-space <space-ref> <id> <data>)
+(holler-wait-space <space-ref> <id> <data>)
+
+
+
+## Installation
+
+FIXME: write
+
+## License
+
+Copyright (C) 2010 Anne Ogborn
+
+This program may be used and distributed under the terms of
+Lesser GNU Public License.
+
