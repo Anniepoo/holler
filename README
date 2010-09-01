@@ -4,6 +4,9 @@ A message broadcasting system for Clojure
 
 note - this is in development, it's not useful for anything yet
 
+Arthur - check the file concurrancy
+
+
 ## Usage
 
 Forgive the weird names. I didn't want to collide with 'actor' based
