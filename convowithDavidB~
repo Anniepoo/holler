@@ -1,0 +1,646 @@
+Monday, August 30, 2010
+[5:31:07 PM] Anne Ogborn: hey hey
+[5:31:38 PM] David B: hi
+[5:31:53 PM] Anne Ogborn: how's life there?
+[5:33:18 PM] Anne Ogborn: yesterday you started talking about radio channel pattern and web dev - I was real intersted in hearing more about that
+[5:33:28 PM] Anne Ogborn: cause I'm trying to think thru this actors thing
+[5:55:27 PM] Anne Ogborn: kk, back inna bit, I'm gonna go lay down for a few mins
+[5:55:57 PM] David B: life is ok.
+[5:56:03 PM] David B: just programming
+[5:56:24 PM] David B: not much different from my life in America.
+[5:56:47 PM] David B: re: radio channel pattern and web dev... i thought you weren't interested in web development.
+[6:31:24 PM] Anne Ogborn: well, I'm interested in architecting this thing
+[6:31:41 PM] Anne Ogborn: thinking thru use cases
+[6:33:07 PM] David B: it seems like most Clojure projects focus on being very minimalistic
+[6:33:20 PM] David B: sort of like a small UNIX function
+[6:33:20 PM] Anne Ogborn: true
+[6:33:25 PM] David B: and generic
+[6:33:38 PM] David B: that way, it's up to the user to find the applications
+[6:33:48 PM] David B: and in a way makes your job easier
+[6:33:53 PM] Anne Ogborn: yes
+[6:34:01 PM] David B: by focusing only on a small core generic feature set
+[6:34:26 PM] David B: that's probably a good approach
+[6:34:35 PM] Anne Ogborn: ok
+[6:34:41 PM] David B: also
+[6:34:57 PM] David B: i think there is a big architecture decision
+[6:35:10 PM] David B: do you make it like one program that runs on one machine
+[6:35:15 PM] David B: or do you make it TCP based
+[6:35:27 PM] David B: like a DrB app
+[6:35:38 PM] Anne Ogborn: DrB app?
+[6:35:45 PM] David B: DRb i mean
+[6:35:51 PM] David B: distributed ruby
+[6:36:04 PM] David B: where you run it on a port
+[6:36:38 PM] Anne Ogborn: that's better handled by stuff built atop this, I think
+[6:36:48 PM] Anne Ogborn: the big issue for me is where to put the mutable state
+[6:37:35 PM] David B: you can create a "world" hash
+[6:37:40 PM] David B: and put it all in there i guess
+[6:37:50 PM] David B: that's what the OpenGL wrapper does
+[6:37:54 PM] David B: (Penumbra)
+[6:38:22 PM] Anne Ogborn: I don't want to have to seq thru the entire data structure to send a message
+[6:38:43 PM] Anne Ogborn: world <--- space *
+[6:38:52 PM] Anne Ogborn: space <-- doodad *
+[6:39:03 PM] Anne Ogborn: doodad <-- handler *
+[6:39:22 PM] David B: do you mean that you don't want to seq through each listener for every message?
+[6:39:52 PM] David B: (on a given channel)
+[6:40:17 PM] David B: i think you should have a vector of channels, and a list of listeners.
+[6:40:33 PM] Anne Ogborn: so each channel's list is mutable?
+[6:40:50 PM] David B: yeah
+[6:41:02 PM] David B: you can make it a ref or atom or whatever
+[6:41:49 PM] David B: like in his ant simulation
+[6:42:08 PM] David B: i think it was a vector of refs i think
+[6:42:11 PM] David B: something like that
+[6:42:29 PM] David B: his 80x80 grid was a vector
+[6:42:50 PM] David B: at each location was a ref to a struct
+[6:42:55 PM] David B: i'm sure i butchered that
+[6:43:00 PM] David B: but it was something like that i think
+[6:43:03 PM] Anne Ogborn: I'll look
+[6:43:59 PM] David B: my brother and sister both need websites
+[6:44:03 PM] David B: and guess who they're coming to
+[6:44:17 PM] David B: and guess who can't make any profit from them
+[6:44:54 PM] Anne Ogborn: they hired a guy off of craigslist? What, no? I'm shocked!
+[6:44:56 PM] Anne Ogborn: :)
+[6:45:54 PM] David B: my bro asked me how much it would cost to make a site like maccosmetics.com
+[6:46:19 PM] David B: which is a mix between flash, javascript, backend programming, and a graphic artist
+[6:46:40 PM] David B: and i had to give him the whole schpiel
+[6:46:52 PM] David B: it was like a 3 page email.
+[6:47:06 PM] Anne Ogborn: omg - this is the big cosmetics manufacturer
+[6:47:07 PM] David B: when i'm sure he just wanted a price
+[6:48:09 PM] Anne Ogborn: yes - first, you need a good advertising person, since there's no point in doing something this complex unless it works to sell
+[6:48:25 PM] Anne Ogborn: then you need a graphic artist and a copywriter
+[6:49:06 PM] Anne Ogborn: a photographer - probably two, a fashion photog to get the model shots, and a product photog to do the makeup shots
+[6:49:26 PM] Anne Ogborn: they'll need PA's and models
+[6:49:36 PM] David B: i didn't think of those non tech roles either
+[6:49:42 PM] Anne Ogborn: you should have the photos run thru somebody pro for post
+[6:50:06 PM] David B: good points
+[6:51:34 PM] Anne Ogborn: you know what lipstick is? It's beeswax, olive oil, and dye, basically.  Cosmetics manufacturers sell their name
+[6:51:59 PM] Anne Ogborn: oh yeah, you're going to want to test the reaction to the site, so you need a market research team
+[6:52:13 PM] Anne Ogborn: you should have a marketer coordinating the whole thing
+[6:52:32 PM] Anne Ogborn: need to run it all thru legal to make sure it's all ok
+[6:52:32 PM] David B: his wife does marketing
+[6:52:55 PM] David B: it's basically for his wife
+[6:53:09 PM] Anne Ogborn: well, MAC is a huge company.
+[6:53:09 PM] David B: and i don't think they have millions to invest in it
+[6:53:19 PM] David B: i c
+[6:53:35 PM] David B: i told them it was probably about $50,000 per page if it was a big corp
+[6:53:53 PM] David B: just for the tech stuff
+[6:54:28 PM] David B: and probably about $1500 / page if done by freelancers in the philippines
+[6:55:09 PM] Anne Ogborn: believe me, that MAC site, the web dev people were the least of the expenses
+[6:55:33 PM] David B: yeah i'm sure
+[6:55:47 PM] David B: but they're just asking me for a quote on the tech stuff
+[6:56:15 PM] Anne Ogborn: what are they selling?
+[6:56:22 PM] David B: jewelry
+[6:56:26 PM] David B: this is their current site
+[6:56:32 PM] David B: seejewelryonline.com
+[6:57:06 PM] David B: they're paying $40/mo at yahoo stores
+[6:57:31 PM] Anne Ogborn: don't forget the SEO
+[6:58:23 PM] Anne Ogborn: this needs technical work to clean up the messed up HTML
+[6:59:50 PM] Anne Ogborn: be honest with them - tell them there's two skills here - engineer and web dev.
+[7:00:03 PM] Anne Ogborn: this site needs a web dev person, you're an engineer
+[7:01:32 PM] David B: i listed 6 skill sets
+[7:01:37 PM] David B: to make the site
+[7:02:06 PM] Anne Ogborn: what did you say?
+[7:02:36 PM] David B: just gave them prices for different ranges
+[7:02:46 PM] David B: of requirements
+[7:03:12 PM] Anne Ogborn: well, they probably have no clue what's involved
+[7:03:25 PM] Anne Ogborn: they just need help finding a realistic solution
+[7:03:37 PM] David B: yah
+[7:03:58 PM] David B: most likely i can't really help them.
+[7:04:38 PM] David B: unless they want to pay like $20k
+[7:04:45 PM] David B: which i doubt they will
+[7:05:59 PM] Anne Ogborn: well, it's reasonable to ask your brother for some help on a weekend, but no, this isn't reasonable scope
+[7:06:34 PM] David B: well i wouldn't do it myself
+[7:06:47 PM] David B: i'd just coordinate evrything
+[7:07:07 PM] David B: and i think he'd have to pay me for my personal time
+[7:07:14 PM] David B: and i'd give the other guys at cost
+[7:07:28 PM] David B: as a sibling discount
+[7:07:49 PM] Anne Ogborn: kk
+[7:07:49 PM] David B: i'm too poor not to charge anything
+[7:07:52 PM] Anne Ogborn: sure
+[7:09:45 PM] David B: it's hard to get jobs at $60/hr
+[7:09:56 PM] David B: i have been kind of testing the craigslist market
+[7:10:03 PM] David B: i can get $50/clients
+[7:10:08 PM] David B: and tons of $40/hr clients
+[7:10:11 PM] David B: but not $60
+[7:10:24 PM] Anne Ogborn: from the jobs section or the gigs section?
+[7:10:33 PM] David B: computer services
+[7:10:58 PM] Anne Ogborn: the other sections are better, the gigs is absurd
+[7:11:32 PM] David B: gigs is for like students or something
+[7:12:37 PM] Anne Ogborn: hey, if you're there, you could set up a support center.
+[7:12:42 PM] Anne Ogborn: 'BPO'
+[7:13:23 PM] Anne Ogborn: if everybody's bilingual in English it's perfect
+[7:13:44 PM] David B: setting it up is not the problem
+[7:13:50 PM] David B: getting clients is
+[7:15:03 PM] Anne Ogborn: hmmm......
+[7:15:35 PM] Anne Ogborn: get your sister in law to find the clients -
+[7:16:02 PM] Anne Ogborn: I figured out that there's people who think like engineers and people who are 'people' people -
+[7:16:07 PM] Anne Ogborn: both have skills
+[7:16:14 PM] David B: yeah
+[7:16:44 PM] Anne Ogborn: so, find somebody who'd like to run around and find clients for a cut of the action
+[7:18:56 PM] David B: yeah
+[7:19:11 PM] David B: i am trying to get out of that business
+[7:19:26 PM] David B: don't want to mange people anymore
+[7:19:49 PM] Anne Ogborn: so don't - find somebody else to do it.
+[7:20:20 PM] David B: then i'd have to be on the board of directors
+[7:20:32 PM] Anne Ogborn: so, buy a suit
+[7:20:36 PM] Anne Ogborn: :)
+[7:20:40 PM] Anne Ogborn: (joking)
+[7:21:28 PM] Anne Ogborn: seriously, you don't even have to do that. Put somebody from your family or your wife's family in charge of wrangling the sales force
+[7:21:31 PM] David B: it's a low-margin man-power management business that i'm not interested in building
+[7:21:37 PM] Anne Ogborn: ah, ok
+[7:21:54 PM] David B: i was doing it from 2005-2009
+[7:22:01 PM] David B: then i got back into programming
+[7:22:12 PM] Anne Ogborn: running a phone support org?
+[7:22:18 PM] Anne Ogborn: I didn't know that
+[7:22:30 PM] David B: i used to outsource projects
+[7:22:34 PM] David B: for web dev
+[7:22:41 PM] David B: and workflow apps
+[7:22:44 PM] Anne Ogborn: that I knew
+[7:22:49 PM] David B: yeah
+[7:23:04 PM] David B: it's the same business model as BPO
+[7:23:25 PM] David B: operations is only slightly different
+[7:26:08 PM] Anne Ogborn: hmmm
+[7:29:39 PM] Anne Ogborn: 3 mins, the anti-carpal thing
+[7:33:28 PM] David B: i'm running automated cucumber/selenium tests on my homework site.
+[7:33:32 PM] David B: pretty fun stuff
+[7:34:43 PM] Anne Ogborn: back
+[7:35:00 PM] Anne Ogborn: that's cool. I should write a mass of tests for this actor thing
+[7:35:15 PM] Anne Ogborn: right now I'm having trouble getting motivated to write it at all
+[7:35:22 PM] David B: what's the main idea
+[7:35:48 PM] David B: i thought the main idea was making function calls by broadcasting messages on integer channels
+[7:36:45 PM] Anne Ogborn: no, the integer channels is a special case
+[7:37:36 PM] Anne Ogborn: I'd say it's better to have named channels
+[7:37:48 PM] Anne Ogborn: integers are a useful special case
+[7:38:09 PM] David B: ok
+[7:38:25 PM] David B: then let me rephrase my question
+[7:38:36 PM] David B: i thought the main idea was making function calls by broadcasting messages on channels
+[7:38:44 PM] Anne Ogborn: yes
+[7:38:46 PM] Anne Ogborn: that's the main idea
+[7:38:50 PM] David B: ok
+[7:39:07 PM] David B: i guess thats why i called it the radio channel pattern
+[7:39:17 PM] David B: cuz i was thinking of radio channels as integers
+[7:39:28 PM] Anne Ogborn: well, in LSL they are
+[7:39:35 PM] David B: but yeah
+[7:39:44 PM] David B: it might be nice to keep it as integers
+[7:39:50 PM] David B: cuz that maps nicely to port numbers
+[7:40:17 PM] David B: you could always hash it to an integer between 100 and 10,000 i guess
+[7:40:24 PM] David B: hash the name i mean
+[7:40:32 PM] Anne Ogborn: more importantly,  you could do things like send a message on channel base + i
+[7:40:40 PM] Anne Ogborn: to talk to the ith element
+[7:40:51 PM] Anne Ogborn: like, I have a data visualization tool in SL
+[7:41:21 PM] Anne Ogborn: it makes the datapoints at setup time, then moves them around
+[7:41:49 PM] Anne Ogborn: if it wants to move the 745th point somewhere it sends a command on base + 745
+[7:42:26 PM] David B: hmm
+[7:42:28 PM] David B: yeah it's neat
+[7:42:34 PM] David B: i almost wanna help you program it
+[7:42:39 PM] David B: but i don't wanna get distracted
+[7:42:43 PM] Anne Ogborn: lol -
+[7:43:06 PM] Anne Ogborn: well, if you want to help, talk to me sometimes during the next few days so I can think out this architecture
+[7:43:28 PM] Anne Ogborn: explaining it to you clarifies my thinking
+[7:44:12 PM] David B: ok sure
+[7:45:01 PM] Anne Ogborn: I'm calling the objects 'doodads' cause object is so overloaded
+[7:45:12 PM] Anne Ogborn: and they're contained in 'spaces'
+[7:45:36 PM] David B: i don't think that's very descriptive
+[7:45:53 PM] David B: can i suggest another name ?
+[7:45:55 PM] Anne Ogborn: sure
+[7:46:02 PM] David B: you have the right to ignore it
+[7:46:04 PM] David B: hehe
+[7:46:15 PM] Anne Ogborn: well, I'm kinda having trouble coming up with good names.
+[7:46:23 PM] Anne Ogborn: what's your alternative?
+[7:46:29 PM] David B: i use names as documentation regularly
+[7:47:12 PM] David B: (i spend a lot of time renaming variables.)
+[7:47:18 PM] Anne Ogborn: well, messaging-object or something seems wrong... let me see if I can articulate why
+[7:47:33 PM] David B: i think the radio channels analogy is really good
+[7:47:48 PM] Anne Ogborn: ok
+[7:47:53 PM] David B: so
+[7:47:56 PM] David B: instead of spaces
+[7:48:03 PM] David B: call it channels
+[7:48:10 PM] David B: and instead of doodads
+[7:48:20 PM] Anne Ogborn: 'channel' is ok for one channel
+[7:48:20 PM] David B: call it radios
+[7:48:34 PM] Anne Ogborn: but a 'space' is a collection of channels
+[7:48:48 PM] David B: ok
+[7:48:53 PM] David B: yeah space is ok
+[7:48:55 PM] Anne Ogborn: you can have more than one space
+[7:48:59 PM] David B: cuz radio waves float out into space
+[7:49:16 PM] David B: or
+[7:49:17 PM] Anne Ogborn: I don't like 'radio' because of radio buttons
+[7:49:21 PM] David B: instead of space
+[7:49:28 PM] David B: (which is kind of overloaded too)
+[7:49:33 PM] Anne Ogborn: true
+[7:49:39 PM] David B: how about "atmosphere"
+[7:49:55 PM] David B: definitely not overloaded in programming....
+[7:49:56 PM] David B: hehe
+[7:50:25 PM] Anne Ogborn: no, cause that analogy breaks down when you start using multiple spaces
+[7:50:32 PM] Anne Ogborn: how about atmos
+[7:50:42 PM] David B: how about tower
+[7:50:46 PM] Anne Ogborn: nope
+[7:51:17 PM] Anne Ogborn: a space is a container for doodads
+[7:51:59 PM] Anne Ogborn: that send broadcasts
+[7:52:07 PM] Anne Ogborn: I might buy 'radios'
+[7:52:38 PM] David B: each radio listens on one or more channels ?
+[7:52:44 PM] Anne Ogborn: yes
+[7:52:50 PM] Anne Ogborn: zero or more
+[7:52:51 PM] David B: and broadcasts on the same channel ?
+[7:52:54 PM] Anne Ogborn: no
+[7:52:55 PM] David B: or a different channel ?
+[7:53:08 PM] David B: do radios broadcast too ?
+[7:53:10 PM] Anne Ogborn: channel is the 'meaning' of the message
+[7:53:19 PM] Anne Ogborn: yes, radios broadcast.
+[7:53:33 PM] Anne Ogborn: like, in the gui example.
+[7:53:38 PM] David B: so
+[7:53:45 PM] David B: if i say "fart" on channel 13
+[7:53:54 PM] David B: that's the same as saying "friend" on channel 13 ?
+[7:54:04 PM] Anne Ogborn: no
+[7:54:16 PM] David B: but you said channel is the meaning of the message
+[7:54:29 PM] Anne Ogborn: ok, I should be clearer
+[7:54:32 PM] David B: ie. what channel you broadcast on determines the meaning of the message
+[7:55:08 PM] Anne Ogborn: the words 'fart' and 'friend' don't intrinsicly have meaning. They're just strings
+[7:55:29 PM] David B: (<channel>, <message>)
+[7:55:33 PM] Anne Ogborn: yes
+[7:55:51 PM] Anne Ogborn: and I know that's trivially (cons <channel> <message>)
+[7:56:06 PM] Anne Ogborn: but the channel means efficiently doing the dispatch
+[7:56:10 PM] Anne Ogborn: which is important
+[7:56:49 PM] David B: well it's basically as efficient as random access
+[7:57:13 PM] David B: cuz once a channel gets saturated with listeners it's O(n) in the number of listeners on the channel
+[7:57:34 PM] Anne Ogborn: yes, it's O(n) in the number of listeners on the channel
+[7:58:18 PM] Anne Ogborn: but for realistic cases n is often small, and when it's not it's the O(n) case in any other language as well
+[7:58:38 PM] David B: so it's just like random access
+[7:58:54 PM] David B: as long as you can expand the number of channels in your space if needed.
+[7:59:04 PM] Anne Ogborn: yes, there's as many channels as you want
+[7:59:19 PM] Anne Ogborn: and a channel's 'name' can be anything - an integer, a string, a keyword
+[7:59:30 PM] David B: so it seems like a space would be a hash
+[7:59:34 PM] Anne Ogborn: yes, it is
+[7:59:40 PM] David B: or a "map" in Clojurese
+[7:59:50 PM] David B: is that what they are calling it ?
+[8:00:18 PM] Anne Ogborn: yes, that's what it's called
+[8:00:29 PM] David B: so
+[8:00:30 PM] Anne Ogborn: and yes, the listeners are stored in a map
+[8:00:31 PM] David B: i think
+[8:00:40 PM] David B: "doodads have radios attached to them"
+[8:00:45 PM] Anne Ogborn: ??
+[8:00:53 PM] Anne Ogborn: doodads ARE radios
+[8:01:02 PM] David B: i'm changing the meaning of doodad
+[8:01:11 PM] Anne Ogborn: ok, then radios are radios
+[8:01:13 PM] David B: cuz
+[8:01:24 PM] David B: i'm thinking of 2nd life
+[8:01:38 PM] David B: you make these 3d objects
+[8:01:41 PM] Anne Ogborn: yes
+[8:01:42 PM] David B: that can be grouped
+[8:01:44 PM] Anne Ogborn: yes
+[8:01:59 PM] David B: and these objects (doodads) have the ability (radio) to listen on a channel.
+[8:02:26 PM] Anne Ogborn: we don't need both terms
+[8:02:34 PM] David B: basically i'm trying to separate the meaning of the two different abilities.
+[8:02:44 PM] Anne Ogborn: hmm.....
+[8:02:56 PM] Anne Ogborn: ok
+[8:03:03 PM] David B: (decoupling :) )
+[8:03:09 PM] Anne Ogborn: let me talk about 2nd life for a minit then
+[8:03:14 PM] Anne Ogborn: cause it's kind of the model
+[8:03:38 PM] Anne Ogborn: there's a region, it has objects in it
+[8:03:50 PM] David B: doodads attach a radio to a function.
+[8:03:52 PM] David B: sorry
+[8:03:56 PM] David B: not to interrupt
+[8:04:03 PM] Anne Ogborn: each object is made up of prims. And each prim has scripts in it.
+[8:04:45 PM] Anne Ogborn: so, there's two 'spaces' for listening - within the object, and globally in the sim
+[8:05:04 PM] Anne Ogborn: within the object you can send link messages
+[8:05:12 PM] Anne Ogborn: between objects you 'chat' on 'channels'
+[8:05:53 PM] David B: i have a question
+[8:06:01 PM] Anne Ogborn: yes?
+[8:06:36 PM] David B: let's say (741, "fart") is linked to (defn play_sound (code to display farting sound))
+[8:06:53 PM] Anne Ogborn: what's 'linked to'
+[8:06:55 PM] David B: And Annie and David just happened to be chatting on channel 741
+[8:07:18 PM] David B: when the word "fart" occurs on channel 741, then the function play_sound is executed.
+[8:07:23 PM] Anne Ogborn: yes
+[8:07:49 PM] David B: if Annie and David are chatting on channel 741, and I said "I farted yesterday."
+[8:07:54 PM] Anne Ogborn: no
+[8:07:58 PM] David B: would function "play_sound" be executed?
+[8:08:01 PM] Anne Ogborn: no
+[8:08:21 PM] Anne Ogborn: you're still thinking in terms of links
+[8:08:22 PM] David B: how about "I like to fart "
+[8:08:35 PM] Anne Ogborn: let me restate what you've said
+[8:09:02 PM] Anne Ogborn: channel 741 is the request-for-sound channel
+[8:09:16 PM] Anne Ogborn: the sound-maker-doodad listens on 741
+[8:10:08 PM] Anne Ogborn: when it hears a string it tries to make the associated sound - lets say it looks it up in a list of strings - if it's there, it plays the associated file from another list.
+[8:10:42 PM] Anne Ogborn: so, I write the sound-maker-doodad, and I can manually test it by saying stuff on 741
+[8:11:01 PM] Anne Ogborn: but, here's the beauty of the system,
+[8:11:26 PM] Anne Ogborn: the sound-maker-doodad just knows what to do, and others know how to get sounds played
+[8:11:36 PM] David B: my question was just that: does the string have to be an exact match, or is it like a regualr expression?
+[8:11:47 PM] Anne Ogborn: that's an implementation issue for the doodad
+[8:12:00 PM] David B: k
+[8:12:16 PM] Anne Ogborn: fart might be some encoded string that means
+[8:12:41 PM] Anne Ogborn: 4 fields from a record to display in a UI element
+[8:12:51 PM] Anne Ogborn: it's only meaningful to the listeners on the channel
+[8:13:32 PM] Anne Ogborn: it's useful because it creates separation of concerns
+[8:13:37 PM] David B: so
+[8:14:00 PM] David B: sorry i'm thinking
+[8:14:10 PM] Anne Ogborn: :) preciate it
+[8:14:33 PM] David B: can u say again what the beauty of the system is ?
+[8:14:38 PM] Anne Ogborn: sure
+[8:14:38 PM] David B: separation of concerns?
+[8:14:56 PM] Anne Ogborn: each doodad offers a service
+[8:15:04 PM] Anne Ogborn: almost like a web service
+[8:15:15 PM] David B: yeah i keep thinking about web services.
+[8:15:26 PM] Anne Ogborn: it doesn't really know or care who'se using the service
+[8:15:41 PM] David B: yeah
+[8:15:45 PM] David B: statelessness
+[8:15:48 PM] David B: that's a good thing
+[8:15:58 PM] Anne Ogborn: yes
+[8:16:04 PM] Anne Ogborn: many doodads are stateless
+[8:16:33 PM] Anne Ogborn: the protocol is stateless
+[8:17:10 PM] Anne Ogborn: and you don't have to send just the right messages just the right place, like you do with java method calls
+[8:17:19 PM] Anne Ogborn: instead, you just send out useful stuff
+[8:18:00 PM] Anne Ogborn: like, if you're the doodad that is listening on a socket and putting the http requests into the system in a web server
+[8:18:17 PM] Anne Ogborn: then you can just take the different headers and read them on different channels
+[8:18:59 PM] David B: does the response only go back to the broadcaster ?
+[8:19:08 PM] Anne Ogborn: there's no response
+[8:19:14 PM] David B: oh
+[8:19:19 PM] David B: only a side-effect ?
+[8:19:26 PM] Anne Ogborn: yes
+[8:19:31 PM] David B: hmm
+[8:20:18 PM] David B: well
+[8:20:21 PM] Anne Ogborn: if imperative programming is a boss and an employee in conversation, then
+[8:20:51 PM] Anne Ogborn: this is more like a presentation in a room or something.
+[8:20:53 PM] David B: the side effect in 2L is the behavior of the object which is enjoyed in a "global" channel called "the 3D world"
+[8:21:07 PM] Anne Ogborn: yes, that's true
+[8:21:23 PM] Anne Ogborn: but a side effect might be to send a message back
+[8:21:40 PM] David B: so
+[8:21:47 PM] Anne Ogborn: and that's common enough that I'll have a special construct for it
+[8:21:49 PM] David B: this is not functional
+[8:21:56 PM] Anne Ogborn: no, it's not
+[8:22:03 PM] Anne Ogborn: it's a different paradigm
+[8:22:42 PM] David B: each radio/doodad behaves like a stateless function whose output has side effects
+[8:22:52 PM] Anne Ogborn: it might not be stateless
+[8:22:58 PM] David B: u know
+[8:23:01 PM] David B: hmm
+[8:23:05 PM] David B: i'm just thinking
+[8:23:26 PM] David B: *maybe*
+[8:23:37 PM] Anne Ogborn: the doodad might be, say, a UI control. It listens on 893 for 'go' or 'stop' and turns red/green
+[8:24:17 PM] David B: you want to restrict it to a functional paradigm
+[8:24:21 PM] David B: (maybe)
+[8:24:23 PM] Anne Ogborn: why?
+[8:24:36 PM] David B: and just see where that takes you
+[8:24:54 PM] David B: it's a severe restriction
+[8:24:59 PM] David B: but you might get some interesting properties
+[8:25:25 PM] David B: just an idea
+[8:26:11 PM] Anne Ogborn: well, the doodads are functional units
+[8:26:30 PM] Anne Ogborn: they map to behavior more than to stored state
+[8:26:42 PM] Anne Ogborn: which is a good thing, in my humble opinion
+[8:26:53 PM] David B: u know what might be interesting
+[8:27:05 PM] David B: is broadcasting responses on channels
+[8:27:18 PM] Anne Ogborn: when that's appropriate, that's what you do
+[8:27:37 PM] Anne Ogborn: suppose A needs a value from B
+[8:27:57 PM] David B: yeah like B is and adder function
+[8:28:12 PM] Anne Ogborn: ok
+[8:28:19 PM] Anne Ogborn: so B knows how to add
+[8:28:34 PM] David B: on channel "addition"
+[8:28:38 PM] Anne Ogborn: yes
+[8:28:49 PM] Anne Ogborn: so A says on "addition", something like
+[8:29:09 PM] Anne Ogborn: (23945863895643   3 5)
+[8:29:34 PM] Anne Ogborn: and listens on channel 23945863895643 for the answer
+[8:30:11 PM] Anne Ogborn: or A can listen on the 'addition-answers' channel until it sees (23945863895643 8)
+[8:30:36 PM] Anne Ogborn: either way's appropriate - the latter one has a convenient form -
+[8:31:04 PM] Anne Ogborn: you can do a send-wait and be guaranteed the answer's in your in queue
+[8:31:21 PM] David B: hmm
+[8:32:03 PM] David B: this is really interesting
+[8:32:35 PM] Anne Ogborn: but usually you want to avoid that sort of 'ask somebody for something' -
+[8:32:45 PM] David B: why is that ?
+[8:32:56 PM] Anne Ogborn: anotoher way to do the add would be to have a 'announce-service' channel
+[8:33:20 PM] David B: brb my wife just woke up
+[8:33:28 PM] David B: i'll read when i get back
+[8:33:30 PM] Anne Ogborn: so A says 'who does addition'? and B responds "I do"
+[8:33:32 PM] Anne Ogborn: ok
+[8:33:49 PM] Anne Ogborn: then A keeps a ref to B and just calls by normal method calls
+[8:34:53 PM] Anne Ogborn: or, say the addition is a real resource like a remote server that sometimes isn't available
+[8:35:46 PM] Anne Ogborn: then A would say 'who does addition?' and B would respond 'I do' and A would send it the problem, but not keep a ref.
+[8:36:13 PM] Anne Ogborn: if addition's compute intensive B might only respond when it's idle
+[8:37:14 PM] Anne Ogborn: so you can turn any resource like that into a pool pretty easy
+[8:39:30 PM] David B: i'm just trying to imagine how to program with messages
+[8:39:44 PM] David B: basically it's like object oriented programming without the objects ?
+[8:40:31 PM] David B: let's consider a degenerate case of the model
+[8:40:39 PM] David B: where there is only 1 channel
+[8:40:53 PM] David B: every message gets passed to every object
+[8:41:04 PM] David B: it's like programming with global variables isn't it ?
+[8:41:21 PM] David B: (which is bad?)
+[8:41:38 PM] Anne Ogborn: it's OO programming where every message is broadcast, not dispatched
+[8:42:05 PM] Anne Ogborn: but yes, only using 1 channel and passing everything everywhere is just about like globals, it's ugly
+[8:42:27 PM] Anne Ogborn: it's possible to write terrible actor oriented programs
+[8:42:40 PM] David B: so
+[8:42:42 PM] David B: i guess
+[8:42:49 PM] David B: the advantage of having multiple channels
+[8:43:10 PM] Anne Ogborn: I'd say using lots of call-return style stuff is a code smell in actor oriented programming
+[8:43:22 PM] David B: is if you have multiple copies of the objects listening on the same channel
+[8:44:37 PM] Anne Ogborn: properly used, a channel is used to transmit the current information about a single thing
+[8:44:51 PM] David B: the thing that is bothering me is
+[8:44:59 PM] David B: how do u know which channel to broadcast to ?
+[8:45:19 PM] David B: and if you ahve to keep track of the channels, isn't that equivalent to keeping track of the objects themselves in an OO paradigm
+[8:45:27 PM] Anne Ogborn: no, it's not
+[8:45:31 PM] David B: so in otherwords whats the advantage
+[8:46:24 PM] Anne Ogborn: the channel is per 'interest'
+[8:46:38 PM] David B: or is it like if you make a bicycle, bicycles can do several things, but all those actions listen on the "bicycle" channel ?
+[8:46:41 PM] Anne Ogborn: it's tied to the information - not to a piece of functionality
+[8:47:33 PM] Anne Ogborn: no, you'd use many channels for a bicycle
+[8:48:15 PM] Anne Ogborn: the tires will talk about being flat on the flat-tire channel
+[8:48:42 PM] David B: ok
+[8:48:50 PM] David B: would a motorcycle
+[8:48:58 PM] David B: also listen on the flat-tire channel ?
+[8:49:14 PM] Anne Ogborn: remember you're tlaking about physical objects - I rarely find programming objects have a lot to do with physical objects
+[8:49:46 PM] Anne Ogborn: the bicycle is probably a space
+[8:49:55 PM] Anne Ogborn: because you don't want to worry about the motorcycle
+[8:50:19 PM] David B: each bicycle instance will have it's own space
+[8:50:23 PM] Anne Ogborn: yes
+[8:50:27 PM] David B: k
+[8:50:42 PM] David B: if a rock touches the tire
+[8:50:53 PM] David B: a message "bump-tire" might fire
+[8:50:56 PM] Anne Ogborn: then the space needs to negotiate that
+[8:51:06 PM] David B: which might propagate to the internal space maybe ?
+[8:51:09 PM] Anne Ogborn: yes, it might do that by sending a message internally
+[8:51:15 PM] David B: k
+[8:51:19 PM] David B: so
+[8:51:24 PM] David B: hmm
+[8:51:41 PM] David B: so a lot of the utility of this paradigm comes from organizing spaces in a clever way
+[8:51:47 PM] David B: and the way messages pass from one space to another
+[8:51:50 PM] Anne Ogborn: you might have a flatten-on-bump doodad
+[8:52:06 PM] Anne Ogborn: yes, you have to be reasonable about how you organize the spaces
+[8:52:45 PM] Anne Ogborn: I'm still debating - at the moment doodads live in a single space. It's kinda like the multiple inheritance problem
+[8:53:00 PM] Anne Ogborn: but for a bicycle, yes, it's a space
+[8:53:15 PM] David B: i think
+[8:53:21 PM] David B: you should set up an infrastructure
+[8:53:28 PM] David B: for programmers to easily set up their own spaces
+[8:53:35 PM] Anne Ogborn: yes, definitely
+[8:53:39 PM] David B: and a DSL for setting up message passing between spaces
+[8:53:50 PM] Anne Ogborn: spaces are doodads
+[8:53:51 PM] David B: then show a couple interesting examples
+[8:54:00 PM] David B: then let the programmers go run with it
+[8:54:06 PM] Anne Ogborn: a space might have special properties
+[8:55:18 PM] Anne Ogborn: it miight be a gui space, and able to send events like mouse down and listen to events like close the window
+[8:56:23 PM] Anne Ogborn: or it might interpret the channel names in a sophisticated way
+[8:56:54 PM] David B: so
+[8:56:57 PM] David B: i have a question
+[8:57:03 PM] Anne Ogborn: so maybe this space knows the 3D position of each doodad, and the doodads can send messages to all doodads within nn meters
+[8:57:08 PM] Anne Ogborn: ok
+[8:57:40 PM] David B: so
+[8:57:44 PM] David B: what's my question
+[8:58:03 PM] Anne Ogborn: ??
+[8:58:09 PM] David B: just wondering about multiple instances
+[8:58:13 PM] David B: like 2 mouses
+[8:58:17 PM] David B: and 2 displays
+[8:58:33 PM] David B: mouse #1 is moved to the right
+[8:58:51 PM] David B: broadcasts on "move-right" channel ?
+[8:59:00 PM] Anne Ogborn: more likely on 'move' channel
+[8:59:10 PM] Anne Ogborn: just sends it's coords
+[8:59:11 PM] David B: "mouse-1-move" channel ?
+[8:59:35 PM] David B: how does the display know to move mouse 1
+[8:59:36 PM] David B: or mouse 2
+[8:59:39 PM] David B: to the right?
+[9:00:01 PM] Anne Ogborn: well, obviously somewhere the programmer has to work that out
+[9:00:10 PM] Anne Ogborn: what's the old programming koan
+[9:00:38 PM] David B: so that's an implementation detail for the programmer when implementing how to interpret the messages ?
+[9:00:44 PM] Anne Ogborn: "programmers are forever thinking that the latest new language will fix the problem that they're not sure what they want to do"
+[9:00:48 PM] David B: or would you create a separate channel for each mouse ?
+[9:01:13 PM] Anne Ogborn: well, you probably transmit raw mouse coords on some raw-mouse channel
+[9:01:54 PM] Anne Ogborn: and then you translate them into the window coords space and transmit on a window-coords channel
+[9:02:17 PM] Anne Ogborn: and in that process you decide what to do with the cursor, and the
+[9:02:26 PM] Anne Ogborn: position you're sending is wherever the cursor is
+[9:03:11 PM] Anne Ogborn: most UI's handle it by using the last device to report a change
+[9:04:21 PM] Anne Ogborn: good actor programming resembles dataflow programming more than OO programming
+[9:04:55 PM] David B: so each monitor gets it's own channel ?
+[9:05:24 PM] David B: and each mouse needs to know the name of the channel of each monitor ?
+[9:05:27 PM] Anne Ogborn: well, that stuff's usually in the details of the underlying graphics package
+[9:05:56 PM] Anne Ogborn: I'm getting lost in what your use case is
+[9:06:17 PM] Anne Ogborn: monitors usually are mapped into a virtual device space
+[9:06:18 PM] David B: 2 different mouses
+[9:06:22 PM] David B: two different monitors
+[9:06:34 PM] Anne Ogborn: one computer
+[9:07:05 PM] David B: i'm just wondering how you would do it
+[9:07:08 PM] David B: of course these don't have to be monitors and mouses
+[9:07:17 PM] David B: but it could be animals in a world
+[9:07:40 PM] David B: like cat1 scratches dog2
+[9:07:44 PM] Anne Ogborn: ok
+[9:07:53 PM] Anne Ogborn: you often need to name objects
+[9:08:02 PM] Anne Ogborn: of course 'name' could be 'ref'
+[9:09:02 PM] David B: what's the mapping of this situation to messages and channels ?
+[9:09:10 PM] David B: what would the message be
+[9:09:15 PM] David B: and on what channel ?
+[9:09:30 PM] Anne Ogborn: the cats and dogs would exist in some common space
+[9:09:41 PM] David B: and would cat1 have to know the name of the dog2 channel ?
+[9:09:48 PM] David B: or is it on a scratch channel
+[9:09:57 PM] Anne Ogborn: yes, it's on a scratch channel
+[9:09:59 PM] David B: and if on the scratch channel how would dog2 only get scratched
+[9:10:05 PM] David B: and not the pillow, say
+[9:10:18 PM] David B: (the pillow is also listening on the scratch channel)
+[9:10:18 PM] Anne Ogborn: the cat would have to say what it's scratching
+[9:10:21 PM] Anne Ogborn: ok
+[9:10:30 PM] Anne Ogborn: the pillow and dog are listening on scratch channel
+[9:10:47 PM] Anne Ogborn: the cat says "dog" on the scratch channel
+[9:11:11 PM] Anne Ogborn: the dog sees it's own name and knows it's been scratched
+[9:11:21 PM] Anne Ogborn: the pillow sees another name and ignores the message
+[9:11:32 PM] Anne Ogborn: the channel thing is just for efficiency
+[9:11:57 PM] David B: there is overhead though in making stuff more efficient
+[9:12:06 PM] David B: just wondering how that overhead would be managed
+[9:12:07 PM] David B: like
+[9:12:26 PM] David B: how does the cat know it's scratching dog2 ?
+[9:12:34 PM] David B: is there an interaction channel ?
+[9:12:47 PM] Anne Ogborn: lets say these are in a 2D world, part of a game
+[9:12:47 PM] David B: or "proximity" channel ?
+[9:13:05 PM] Anne Ogborn: then your space probably provides that
+[9:13:32 PM] Anne Ogborn: like, lets say the cat scratches anything it comes within 1 unit of
+[9:14:41 PM] David B: do you broadcast your coordinates ?
+[9:14:48 PM] David B: (cat 1 1)
+[9:14:53 PM] David B: (cat 2 2)
+[9:14:56 PM] David B: (cat 2 3)
+[9:14:56 PM] Anne Ogborn: you'd have to to cooperate with a space like that
+[9:15:11 PM] Anne Ogborn: sure, the cat would move by broadcasting it's location
+[9:15:28 PM] Anne Ogborn: listen handlers can find out who the sender is
+[9:15:54 PM] Anne Ogborn: so a 2D animal space would listen on this and update the animal positions
+[9:16:28 PM] David B: the listen handler in the "location" channel might have some way of indexing the space for efficient proximity look-up.
+[9:16:39 PM] Anne Ogborn: yes
+[9:16:57 PM] Anne Ogborn: it might be keeping the animals in some complex structure for efficient search
+[9:17:10 PM] David B: then maybe there is an "very close" channel ?
+[9:17:21 PM] David B: that the location channel  broadcasts  to
+[9:17:25 PM] Anne Ogborn: no
+[9:17:36 PM] David B: ("very close", "cat dog")
+[9:17:39 PM] Anne Ogborn: more likely, you can send messages to a channel of the form
+[9:17:50 PM] Anne Ogborn: ("scratch"  1)
+[9:18:04 PM] Anne Ogborn: and the space, which is the delivery agent for messages,
+[9:18:16 PM] Anne Ogborn: only delivers the message to things within 1 unit of the sender
+[9:18:31 PM] David B: then cat knows to send out ("scratch",  "dog") from having received ("very close", "cat dog")
+[9:19:00 PM] Anne Ogborn: yes, there might be a channel that I can listen to
+[9:19:07 PM] Anne Ogborn: the 'very close' channel
+[9:19:15 PM] Anne Ogborn: I'll only hear the names of things close to me
+[9:19:29 PM] Anne Ogborn: the space controls dispatch
+[9:19:43 PM] David B: ok
+[9:19:45 PM] David B: i think i get it
+[9:19:54 PM] David B: i think i can program in this paradigm now
+[9:19:55 PM] David B: hehe
+[9:20:18 PM] Anne Ogborn: I'm just impressed by these 'scriptors' in SL
+[9:20:32 PM] Anne Ogborn: they don't acutally know how to program, but they have bits of this LSL code
+[9:20:43 PM] Anne Ogborn: they string it together, it just runs
+[9:20:55 PM] Anne Ogborn: we give our students a HUD to wear
+[9:21:16 PM] Anne Ogborn: recently I realized they needed a different HUD to fly at high altitude
+[9:21:19 PM] David B: like what do these students program ?
+[9:21:38 PM] Anne Ogborn: our students don't program
+[9:21:48 PM] David B: oh
+[9:21:58 PM] David B: i think i get why this is easy to program in
+[9:21:59 PM] Anne Ogborn: so I modified our help HUD by literally just moving the script from one to the other
+[9:22:34 PM] David B: in regular programming, the default is that nothing works unless all the stars align properly (you get an error message and the program halts)
+[9:22:40 PM] Anne Ogborn: yes
+[9:22:44 PM] David B: here, if something is not correct
+[9:22:49 PM] David B: it just gets ignored
+[9:22:51 PM] Anne Ogborn: yes
+[9:22:53 PM] David B: and the world happily runs forward
+[9:22:58 PM] Anne Ogborn: yes
+[9:23:07 PM] David B: so the default is reversed
+[9:23:10 PM] Anne Ogborn: and, scary as that seems, it works beautifully
+[9:23:15 PM] David B: the error-default
+[9:23:23 PM] David B: hmm
+[9:23:24 PM] David B: so
+[9:23:33 PM] David B: one advantage
+[9:23:41 PM] David B: is that you can have 100% uptime
+[9:23:49 PM] David B: and change the system while it's live
+[9:24:01 PM] Anne Ogborn: certainly things rarely crash without recovering
+[9:24:16 PM] David B: hmm
+[9:24:20 PM] Anne Ogborn: yes, you can change the system while it's live
+[9:24:27 PM] David B: ok
+[9:24:35 PM] David B: i'm starting to see this
+[9:25:23 PM] Anne Ogborn: the other beautiful part is that chunks of code do what they do. They are hard to 'break'
+[9:25:55 PM] Anne Ogborn: usually bugs are either 'didn't do what I wanted, did what I asked'
+[9:26:19 PM] Anne Ogborn: or they're because I have state in the objects, and they're getting into a hung state
+[9:26:20 PM] David B: the big bug i can see is
+[9:26:28 PM] David B: infinite loops
+[9:26:37 PM] David B: exponential explosion of messages
+[9:26:46 PM] Anne Ogborn: both possible
+[9:26:49 PM] David B: but i think you can detect that
+[9:27:07 PM] David B: and put hard limits on numbr of messages generated from a single source
+[9:27:26 PM] Anne Ogborn: when the message queue gets to some max length you can drop messages and/or throw an exception
+[9:27:36 PM] Anne Ogborn: remember that messages queue
+[9:28:06 PM] David B: i think if you had a meta-data tag that showed the first calller
+[9:28:15 PM] Anne Ogborn: the only way to get a true infinite loop is to have a loop in the code that's not exiting - but yes, you can get something that looks like an email loop
+[9:28:17 PM] David B: you could easily detect messages that get out of control
+[9:28:26 PM] David B: simply by having a counter
+[9:28:34 PM] Anne Ogborn: the messages are async
+[9:28:42 PM] Anne Ogborn: messages go on a queue
+[9:28:54 PM] Anne Ogborn: we do know who sent them
+[9:29:15 PM] David B: yeah
+[9:29:29 PM] David B: this is neat
+[9:29:54 PM] Anne Ogborn: you're guaranteed never to be inside the same doodad's code twice, in the LSL model
+[9:30:03 PM] Anne Ogborn: (there it's a 'script')
+[9:30:17 PM] Anne Ogborn: and effectively each script has a green thread for itself
+[9:30:42 PM] David B: gonna take a shower
+[9:30:47 PM] David B: ttyl
+[9:30:52 PM] David B: i should get back to work
+[9:30:55 PM] Anne Ogborn: to run multiple cores you can send the messages to multiple people
+[9:30:57 PM] Anne Ogborn: ok, thanks
+[9:31:08 PM] David B: welcome
+[9:31:09 PM] Anne Ogborn: explainign this to somebody has really helped me clarify my thinking
+[9:31:15 PM] David B: yeah
+[9:31:28 PM] David B: that helps
+[9:31:31 PM] David B: helped me too
+[9:31:53 PM] David B: i might try implementing something myself
+[9:31:55 PM] Anne Ogborn: yah, you ask about cases and it makes me think things thru
+[9:32:01 PM] Anne Ogborn: LOL -
+[9:32:02 PM] David B: then we can compare notes later
+[9:32:06 PM] David B: (in an ideal world)
+[9:32:07 PM] Anne Ogborn: that'd be interesting
+[9:32:16 PM] David B: yeah
+[9:32:36 PM] David B: alright
+[9:32:36 PM] David B: ttyl
+[9:32:41 PM] Anne Ogborn: sure, ttyl!

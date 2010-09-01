@@ -1,0 +1,9 @@
+(import java.lang.Thread)
+
+(def foo (agent 0))
+
+(defn george [a] (dorun (do (println "hi") (Thread/sleep 5000) (println "bye"))))
+
+(send foo george)
+
+
