@@ -1,0 +1,25 @@
+Global setup:
+
+ Download and install Git
+  git config --global user.name "Anne Ogborn"
+  git config --global user.email annie66us@yahoo.com
+        
+
+Next steps:
+
+  mkdir temp
+  cd temp
+  git init
+  touch README
+  git add README
+  git commit -m 'first commit'
+  git remote add origin git@github.com:Anniepoo/temp.git
+  git push origin master
+      
+
+Existing Git Repo?
+
+  cd existing_git_repo
+  git remote add origin git@github.com:Anniepoo/temp.git
+  git push origin master
+      
