@@ -1,0 +1,23 @@
+The space has two structures - a queue of messages and a mutable map of lists of listeners. Each is an agent.
+
+in add-message this happens:
+
+1. an action ADD  is created to add the message to the end of the queue.
+
+ADD fires off PROCESS-ONE, appends the message to the queue, and exits.
+
+PROCESS-ONE fires off PROCESS on the head of the queue  and returns the rest.
+if the list is nil it just returns nil.
+
+PROCESS fires off DISPATCH on the listeners and then fires off PROCESS-ONE.
+
+
+DISPATCH does a chunked pmap on the listeners
+
+if the add/remove listener code uses an agent, I think we're good
+
+
+
+What about futures?
+naw, agents seem the thing to do
+
