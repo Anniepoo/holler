@@ -1,7 +1,0 @@
-The space has two structures - a queue of messages and a mutable map of lists of listeners
-(in practice, it has a third, a queue of doodads, so a doodad can 'unregister',
-but that's irrelevant here - it might even go away)
-
-when a message is added to the message queue it triggers the 
-
-(defn lecarre [a] (dorun (do (send a didthesecond) (Thread/sleep 5000) (println "smileys people"))))
