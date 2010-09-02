@@ -2,18 +2,25 @@
 
 A message broadcasting system for Clojure
 
-note - this is in development, it's not useful for anything yet
-
-Arthur - check the file concurrancy
-
-
 ## Usage
 
-Forgive the weird names. I didn't want to collide with 'actor' based
-systems, and 'object' seemed suicidal as well.
+Holler provides a broadcast message system for Clojure.
 
-The metaphor is that there are objects (I call them doodads)
-which are, at any time, in a space.
+There are two inspirations for this.
+
+First, my other language is LSL, the internal scripting language for
+the Second Life environment. While this language has it's limitations,
+it has a neat message passing scheme.
+Second, it's a reaction to the horrid Java listener pattern.
+
+
+Forgive the weird names. I didn't want to collide with 'actor' based
+systems, and 'object' seemed suicidal as well, so I call objects
+that participate in the system 'doodads'.
+
+The metaphor is that there are objects (I call them doodads) which are, 
+at any time, in a space.
+
 Each space is itself a doodad.
 
 doodads communicate by broadcasting async or sync messages.

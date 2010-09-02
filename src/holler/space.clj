@@ -8,7 +8,7 @@
 	 :dispatch (ref  {})	 ; map from id's to lists of listeners
 	 ; each listener is [doodad handler-fn] 
 ; not needed yet	 :doodads   (ref '()) ; list of doodads. When you remove, remove the listeners
-	 :messages  (ref '()) ; message queue. each msg is [sender id data]
+	 :messages  (ref '()) ; message queue. each msg is [sender id data callback]
 	 }
 	]
     space))
@@ -20,21 +20,21 @@
 (defn- dispatch-msg
   "directly dispatch a message to a listener. You probably
 don't want to do this"
-  [[doodad handler-fn :as listen] [sender id data :as msg]]
+  [[doodad handler-fn :as listen] [sender id data _ :as msg]]
   (binding [holler-sender sender
 	    holler-id id]
-    (if (= doodad sender)
+    (if (= doodad sender) ; we don't dispatch to ourselves
       nil
-      (apply handler-fn '(doodad data)))))
+      (apply handler-fn (list doodad data)))))
 
 (defn- process-a-msg
   "you don't want this, you want process-queue or send-msg"
-  [{dispatch-table :dispatch} [sender id data :as msg]]
+  [{dispatch-table :dispatch} [sender id data callback :as msg]]
   (let [listeners (id @dispatch-table)]
     (if listeners
-      (dorun (map #(dispatch-msg % msg) listeners )))
-    )
-  )
+      (do
+	(dorun (map #(dispatch-msg % msg) listeners ))
+	(if callback (callback))))))
 
 (defn- pop-ref
   "given a ref, assume it points at a seq. Atomicly alter the ref
@@ -44,7 +44,6 @@ to contain the rest, returning the first"
    (let [ a  (first @ref)
 	 _  (alter ref rest)]
      a)))
-
 
 ; removes the first message from the queue
 ; process it, and do this until the queue is empty, because
@@ -70,17 +69,19 @@ Usage: space - space to broadcast message in
 sender - the sending doodad, or nil
 id  - the id of the message
 data - the body of the message"
-  [space sender id data]
+  [space sender id data callback]
     (dosync
      (alter (:messages space)
 	    (fn [q]
-	      (into q [[sender id data]]))))
+	      (into q [[sender id data callback]]))))
     (process-queue space))
 
 (defn holler
   "broadcast a message into this space."
-  [space sender id data]
-  (add-msg space sender id data))
+  ( [space sender id data]
+      (add-msg space sender id data nil))
+  ( [space sender id data callback]
+      (add-msg space sender id data callback)))
 
 (defn add-listener
   "add a listener."
@@ -97,4 +98,10 @@ data - the body of the message"
    (alter (:dispatch space)
 	  (fn [disp]
 	    (assoc disp id (filter #(= receiver (first %)) (id disp)))))))
+
+(defn remove-all-listeners
+  "remove all listeners on a single receiver"
+  [space receiver]
+  (dorun (map #(remove-listener space % receiver) (keys (:dispatch space)))))
+
 
