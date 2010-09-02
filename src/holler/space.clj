@@ -25,14 +25,14 @@ don't want to do this"
 	    holler-id id]
     (if (= doodad sender)
       nil
-      (apply handler-fn doodad data))))
+      (apply handler-fn '(doodad data)))))
 
 (defn- process-a-msg
   "you don't want this, you want process-queue or send-msg"
   [{dispatch-table :dispatch} [sender id data :as msg]]
   (let [listeners (id @dispatch-table)]
     (if listeners
-      (map #(dispatch-msg % msg) listeners ))
+      (dorun (map #(dispatch-msg % msg) listeners )))
     )
   )
 
@@ -42,7 +42,7 @@ to contain the rest, returning the first"
   [ref]
   (dosync
    (let [ a  (first @ref)
-	 _  (alter ref pop)]
+	 _  (alter ref rest)]
      a)))
 
 
@@ -53,7 +53,7 @@ to contain the rest, returning the first"
   "process as many messages as possible from the queue.
 probably not what you're looking for"
   [space]
-  (loop
+  (loop  [a 1]
   ; this can't be done with map because we explicitly need to allow
       ; the queue to be altered during execution
 	; the mutable messages queue. see below
@@ -62,7 +62,7 @@ probably not what you're looking for"
 	  nil
 	  (do
 	    (process-a-msg space m)
-	    (recur))))))
+	    (recur 1))))))
 
 (defn- add-msg
   "Add a message to the end of the message queue of a space.
@@ -96,5 +96,5 @@ data - the body of the message"
   (dosync
    (alter (:dispatch space)
 	  (fn [disp]
-	    (assoc disp id (filter #(=r receiver (first %)) (id disp)))))))
+	    (assoc disp id (filter #(= receiver (first %)) (id disp)))))))
 
