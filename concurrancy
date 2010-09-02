@@ -21,3 +21,20 @@ if the add/remove listener code uses an agent, I think we're good
 What about futures?
 naw, agents seem the thing to do
 
+=========
+
+ok, what's needed is to do these things atomicly
+
+* Add a message to the queue
+* Remove a message from the queue and dispatch it
+* test whether the queue is empty
+
+every message must have been added, so we need to call dispatch
+once for every add.
+
+*add listeners in a coordinated manner
+*remove listeners in a coordinated manner
+
+(dosync (let [p (first @ref)] (alter ref pop) p)) 
+
+
