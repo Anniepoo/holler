@@ -104,4 +104,3 @@ data - the body of the message"
   [space receiver]
   (dorun (map #(remove-listener space % receiver) (keys (:dispatch space)))))
 
-
